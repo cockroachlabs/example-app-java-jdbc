@@ -1,3 +1,5 @@
+package com.cockroachlabs;
+
 import java.util.*;
 import java.time.*;
 import java.sql.*;
@@ -5,27 +7,9 @@ import javax.sql.DataSource;
 
 import org.postgresql.ds.PGSimpleDataSource;
 
-/*
-  Download the Postgres JDBC driver jar from https://jdbc.postgresql.org.
-
-  Then, compile and run this example like so:
-
-  $ export CLASSPATH=.:/path/to/postgresql.jar
-  $ javac BasicExample.java && java BasicExample
-
-  To build the javadoc:
-
-  $ javadoc -package -cp .:./path/to/postgresql.jar BasicExample.java
-
-  At a high level, this code consists of two classes:
-
-  1. BasicExample, which is where the application logic lives.
-
-  2. BasicExampleDAO, which is used by the application to access the
-     data store.
-
-*/
-
+/**
+ * Main class for the basic JDBC example.
+ **/
 public class BasicExample {
 
     public static void main(String[] args) {
@@ -36,7 +20,12 @@ public class BasicExample {
         ds.setPortNumber(26257);
         ds.setDatabaseName("bank");
         ds.setUser("maxroach");
-        ds.setPassword(null);
+        // ds.setPassword(null);
+        ds.setSsl(true);
+        ds.setSslMode("require");
+        ds.setSslRootCert("certs/client.root.crt"); // certs dir is relative to app dir
+        ds.setSslCert("certs/client.maxroach.crt");
+        ds.setSslKey("certs/client.maxroach.key.pk8");
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("BasicExample");
 
