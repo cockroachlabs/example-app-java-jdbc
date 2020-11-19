@@ -20,12 +20,9 @@ public class BasicExample {
         ds.setPortNumber(26257);
         ds.setDatabaseName("bank");
         ds.setUser("maxroach");
-        // ds.setPassword(null);
+        ds.setPassword("password");
         ds.setSsl(true);
         ds.setSslMode("require");
-        ds.setSslRootCert("certs/client.root.crt"); // certs dir is relative to app dir
-        ds.setSslCert("certs/client.maxroach.crt");
-        ds.setSslKey("certs/client.maxroach.key.pk8");
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("BasicExample");
 
