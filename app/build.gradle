@@ -1,0 +1,20 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+}
+
+repositories {
+    // Use JCenter for resolving dependencies.
+    jcenter()
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'org.postgresql:postgresql:42.2.18'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'com.cockroachlabs.BasicExample'
+}

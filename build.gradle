@@ -1,0 +1,4 @@
+allprojects {
+  group 'com.cockroachlabs'
+  version '1.0'
+}

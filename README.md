@@ -4,12 +4,12 @@ This repo has a "Hello World" Java application that uses [JDBC](https://jdbc.pos
 
 To run the code:
 
-1. Start a [local, insecure CockroachDB cluster](https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html).
+1. Start a [local, secure CockroachDB cluster](https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html).
 
-2. Create a `bank` database and `maxroach` user as described in [Build a Java app with CockroachDB](https://www.cockroachlabs.com/docs/stable/build-a-java-app-with-cockroachdb.html#insecure).
+2. Create a `bank` database and `maxroach` user as described in [Build a Java app with CockroachDB](https://www.cockroachlabs.com/docs/stable/build-a-java-app-with-cockroachdb.html#secure).
 
 3. From the [SQL client](https://www.cockroachlabs.com/docs/stable/cockroach-sql.html): `GRANT ALL ON DATABASE bank TO maxroach`
 
-4. In your terminal, from this directory: `make`
+4. Set the user password in the data source settings in `app/src/main/java/com/cockroachlabs/BasicExample.java`.
 
-Note that this repo includes the Postgres JDBC driver JAR file.
+5. In your terminal, from this directory: `./gradlew run`.
