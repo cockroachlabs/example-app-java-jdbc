@@ -1,10 +1,16 @@
 package com.cockroachlabs;
 
-import java.util.*;
-import java.time.*;
-import java.sql.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import javax.sql.DataSource;
-
 import org.postgresql.ds.PGSimpleDataSource;
 
 /**
@@ -16,8 +22,8 @@ public class BasicExample {
 
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setServerName("localhost");
-        ds.setPortNumber(26257);
+        ds.setServerNames(new String[]{"localhost"});
+        ds.setPortNumbers(new int[]{26257});
         ds.setDatabaseName("bank");
         ds.setUser("maxroach");
         ds.setPassword("password");
@@ -38,21 +44,21 @@ public class BasicExample {
         dao.createAccounts();
 
         // Insert a few accounts "by hand", using INSERTs on the backend.
-        Map<String, String> balances = new HashMap<String, String>();
+        Map<String, String> balances = new HashMap<>();
         balances.put("1", "1000");
         balances.put("2", "250");
         int updatedAccounts = dao.updateAccounts(balances);
         System.out.printf("BasicExampleDAO.updateAccounts:\n    => %s total updated accounts\n", updatedAccounts);
 
         // How much money is in these accounts?
-        int balance1 = dao.getAccountBalance(1);
-        int balance2 = dao.getAccountBalance(2);
+        BigDecimal balance1 = dao.getAccountBalance(1);
+        BigDecimal balance2 = dao.getAccountBalance(2);
         System.out.printf("main:\n    => Account balances at time '%s':\n    ID %s => $%s\n    ID %s => $%s\n", LocalTime.now(), 1, balance1, 2, balance2);
 
         // Transfer $100 from account 1 to account 2
         int fromAccount = 1;
         int toAccount = 2;
-        int transferAmount = 100;
+        BigDecimal transferAmount = BigDecimal.valueOf(100);
         int transferredAccounts = dao.transferFunds(fromAccount, toAccount, transferAmount);
         if (transferredAccounts != -1) {
             System.out.printf("BasicExampleDAO.transferFunds:\n    => $%s transferred between accounts %s and %s, %s rows updated\n", transferAmount, fromAccount, toAccount, transferredAccounts);
@@ -103,7 +109,7 @@ class BasicExampleDAO {
        in production code.
     */
     void testRetryHandling() {
-        if (this.FORCE_RETRY) {
+        if (BasicExampleDAO.FORCE_RETRY) {
             runSQL("SELECT crdb_internal.force_retry('1s':::INTERVAL)");
         }
     }
@@ -195,7 +201,7 @@ class BasicExampleDAO {
                                 // integer values (technically 64-bit INT8s, the CockroachDB
                                 // default).  This code could be made into a switch statement
                                 // to handle the various SQL types needed by the application.
-                                if (type == "int8") {
+                                if ("int8".equals(type)) {
                                     int val = rs.getInt(name);
 
                                     // This printed output is for debugging and/or demonstration
@@ -275,7 +281,7 @@ class BasicExampleDAO {
      * Creates a fresh, empty accounts table in the database.
      */
     public void createAccounts() {
-        runSQL("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, balance INT, CONSTRAINT balance_gt_0 CHECK (balance >= 0))");
+        runSQL("CREATE TABLE IF NOT EXISTS accounts (id INT PRIMARY KEY, balance DECIMAL(12,2), CONSTRAINT balance_gt_0 CHECK (balance >= 0))");
     };
 
     /**
@@ -306,10 +312,10 @@ class BasicExampleDAO {
      * @param amount (int)
      * @return The number of updated accounts (int)
      */
-    public int transferFunds(int fromId, int toId, int amount) {
+    public int transferFunds(int fromId, int toId, BigDecimal amount) {
             String sFromId = Integer.toString(fromId);
             String sToId = Integer.toString(toId);
-            String sAmount = Integer.toString(amount);
+            String sAmount = amount.toPlainString();
 
             // We have omitted explicit BEGIN/COMMIT statements for
             // brevity.  Individual statements are treated as implicit
@@ -337,8 +343,8 @@ class BasicExampleDAO {
      * @param id (int)
      * @return balance (int)
      */
-    public int getAccountBalance(int id) {
-        int balance = 0;
+    public BigDecimal getAccountBalance(int id) {
+        BigDecimal balance = BigDecimal.valueOf(0);
 
         try (Connection connection = ds.getConnection()) {
 
@@ -347,9 +353,9 @@ class BasicExampleDAO {
                     .executeQuery("SELECT balance FROM accounts WHERE id = "
                                   + id);
                 if(!res.next()) {
-                    System.out.printf("No users in the table with id %i", id);
+                    System.out.printf("No users in the table with id %d", id);
                 } else {
-                    balance = res.getInt("balance");
+                    balance = res.getBigDecimal("balance");
                 }
         } catch (SQLException e) {
             System.out.printf("BasicExampleDAO.getAccountBalance ERROR: { state => %s, cause => %s, message => %s }\n",
@@ -394,9 +400,9 @@ class BasicExampleDAO {
                 for (int i=0; i<=(500/BATCH_SIZE);i++) {
                     for (int j=0; j<BATCH_SIZE; j++) {
                         int id = random.nextInt(1000000000);
-                        int balance = random.nextInt(1000000000);
+                        BigDecimal balance = BigDecimal.valueOf(random.nextInt(1000000000));
                         pstmt.setInt(1, id);
-                        pstmt.setInt(2, balance);
+                        pstmt.setBigDecimal(2, balance);
                         pstmt.addBatch();
                     }
                     int[] count = pstmt.executeBatch();
