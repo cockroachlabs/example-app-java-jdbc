@@ -12,3 +12,7 @@ stylesheet.css
 # Ignore Gradle build output directory
 build
 **/certs
+
+.classpath
+.project
+.settings

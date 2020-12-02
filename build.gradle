@@ -1,4 +1,10 @@
 allprojects {
   group 'com.cockroachlabs'
   version '1.0'
+
+  gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:deprecation"
+    }
+  }
 }
