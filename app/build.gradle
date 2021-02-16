@@ -17,4 +17,5 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'com.cockroachlabs.BasicExample'
+    applicationDefaultJvmArgs = ['-Djdk.tls.client.protocols=TLSv1.2']
 }

@@ -16,3 +16,6 @@ build
 .classpath
 .project
 .settings
+
+# jenv local settings
+.java-version
