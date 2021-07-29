@@ -1,15 +1,3 @@
-# hello-world-java-jdbc
+This repo contains the source code for a simple CRUD application, written in Java. The application uses the [JDBC](https://jdbc.postgresql.org/) to connect to and communicate with an existing [CockroachDB](https://www.cockroachlabs.com/docs/stable/) cluster.
 
-This repo has a "Hello World" Java application that uses [JDBC](https://jdbc.postgresql.org) to talk to [CockroachDB](https://www.cockroachlabs.com/docs/stable/).
-
-To run the code:
-
-1. Start a [local, secure CockroachDB cluster](https://www.cockroachlabs.com/docs/stable/start-a-local-cluster.html).
-
-2. Create a `bank` database and `maxroach` user as described in [Build a Java app with CockroachDB](https://www.cockroachlabs.com/docs/stable/build-a-java-app-with-cockroachdb.html#secure).
-
-3. From the [SQL client](https://www.cockroachlabs.com/docs/stable/cockroach-sql.html): `GRANT ALL ON DATABASE bank TO maxroach`
-
-4. Set the user password in the data source settings in `app/src/main/java/com/cockroachlabs/BasicExample.java`.
-
-5. In your terminal, from this directory: `./gradlew run`.
+For instructions on starting CockroachDB and running the code, see [this tutorial](https://www.cockroachlabs.com/docs/stable/build-a-java-app-with-cockroachdb.html).
