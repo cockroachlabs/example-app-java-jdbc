@@ -23,19 +23,16 @@ public class BasicExample {
 
     public static void main(String[] args) {
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the demo password: ");
-        String password = scan.nextLine();
-
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setServerNames(new String[]{"localhost"});
+        ds.setServerNames(new String[]{"<globalhost>"});
         ds.setPortNumbers(new int[]{26257});
-        ds.setDatabaseName("bank");
-        ds.setUser("demo");
-        ds.setPassword(password);
+        ds.setDatabaseName("<cluster>.bank");
         ds.setSsl(true);
-        ds.setSslMode("require");
+        ds.setUser("<user>>");
+        ds.setPassword("<password>");
+        ds.setSslMode("verify-full");
+        ds.setSslRootCert(System.getenv("$HOME/.postgresql/root.crt"));
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("BasicExample");
 
