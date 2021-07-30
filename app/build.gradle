@@ -19,3 +19,7 @@ application {
     mainClass = 'com.cockroachlabs.BasicExample'
     applicationDefaultJvmArgs = ['-Djdk.tls.client.protocols=TLSv1.2']
 }
+
+run {
+    standardInput = System.in
+}
