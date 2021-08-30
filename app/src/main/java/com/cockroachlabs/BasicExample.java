@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.Scanner;
 import javax.sql.DataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -25,12 +24,12 @@ public class BasicExample {
 
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setServerNames(new String[]{"<globalhost>"});
+        ds.setServerNames(new String[]{"{globalhost}"});
         ds.setPortNumbers(new int[]{26257});
-        ds.setDatabaseName("<cluster>.bank");
+        ds.setDatabaseName("{cluster_name}.bank");
         ds.setSsl(true);
-        ds.setUser("<user>>");
-        ds.setPassword("<password>");
+        ds.setUser("{username}");
+        ds.setPassword("{password}");
         ds.setSslMode("verify-full");
         ds.setSslRootCert(System.getenv("$HOME/.postgresql/root.crt"));
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
