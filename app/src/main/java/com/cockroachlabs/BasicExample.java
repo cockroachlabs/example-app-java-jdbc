@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.Scanner;
 import javax.sql.DataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -23,19 +22,14 @@ public class BasicExample {
 
     public static void main(String[] args) {
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the demo password: ");
-        String password = scan.nextLine();
-
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
         ds.setServerNames(new String[]{"localhost"});
         ds.setPortNumbers(new int[]{26257});
         ds.setDatabaseName("bank");
-        ds.setUser("demo");
-        ds.setPassword(password);
-        ds.setSsl(true);
-        ds.setSslMode("require");
+        ds.setUser("root");
+        ds.setSsl(false);
+        ds.setSslMode("disable");
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("BasicExample");
 
