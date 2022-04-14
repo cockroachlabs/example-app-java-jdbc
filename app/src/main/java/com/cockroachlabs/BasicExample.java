@@ -1,6 +1,5 @@
 package com.cockroachlabs;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,14 +23,7 @@ public class BasicExample {
 
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
-        ds.setServerNames(new String[]{"localhost"});
-        ds.setPortNumbers(new int[]{26257});
-        ds.setDatabaseName("bank");
-        ds.setUser("root");
-        ds.setSsl(false);
-        ds.setSslMode("disable");
-        ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
-        ds.setApplicationName("BasicExample");
+        ds.setUrl(System.getenv("JDBC_DATABASE_URL"));
 
         // Create DAO.
         BasicExampleDAO dao = new BasicExampleDAO(ds);
