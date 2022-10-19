@@ -23,6 +23,7 @@ public class BasicExample {
 
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
+        ds.setApplicationName("docs_simplecrud_jdbc");
         ds.setUrl(System.getenv("JDBC_DATABASE_URL"));
 
         // Create DAO.
