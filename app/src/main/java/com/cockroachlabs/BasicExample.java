@@ -34,6 +34,9 @@ public class BasicExample {
         // necessary in production code.
         dao.testRetryHandling();
 
+        // Create the accounts table if it doesn't exist 
+        dao.createAccountsTable();
+        
         // Insert a few accounts "by hand", using INSERTs on the backend.
         Map<String, String> balances = new HashMap<>();
         UUID id1 = UUID.randomUUID();
@@ -412,6 +415,14 @@ class BasicExampleDAO {
      */
     public int readAccounts(int limit) {
         return runSQL("SELECT id, balance FROM accounts LIMIT ?", Integer.toString(limit));
+    }
+    
+    /**
+     * Create the accounts table if it doesn't already exist.
+     *
+     */
+    public void createAccountsTable() {
+        runSQL("CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY, balance int8)");
     }
 
 }
